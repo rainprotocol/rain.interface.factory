@@ -1,8 +1,46 @@
-# qakit.foundry
-Cross cutting QA concerns for foundry based solidity development
+# rain.interface.factory
 
-## Use as template
+Docs at https://rainprotocol.github.io/rain.interface.factory
 
-```
-forge init -t rainprotocol/qakit.foundry <projectname>
-```
+## Interfaces
+
+Contains interfaces for working with Rain factories.
+
+Rain tooling/ecosystem generally tries to be as agnostic and low friction as
+possible on the implementation side.
+
+The ideal would be that "any" contract can call an interpreter and magically be
+supported but there's a lot that can go wrong, for example:
+
+- Contracts can self destruct or even [redeployed with new bytecode](https://0age.medium.com/the-promise-and-the-peril-of-metamorphic-contracts-9eb8b8413c5e)
+- Proxies can point to new implementations and "upgrade"
+- Discoverability of ABIs and other metadata subject to indexer limitations
+
+Falling short of the ideal, we want to support:
+
+- Ability to (dis)trust contracts at the bytecode level NOT the human/key level
+- Support existing patterns such as EIP1167 for clones, etc.
+- Avoid introducing Rain-isms as much as possible
+
+The current interfaces in this repository are for
+
+- `CloneFactoryV1` that is expected to clone proxies from a reference
+  implementation
+- A small interface `ICloneableV1` designed for cloneable proxy contracts to
+  expose an `initialize` function that the factory can call to act like a
+  constructor
+
+## Legacy `IFactory`
+
+The legacy factory model was much more restricted in that each factory
+implementation was 1:1 with the thing it was deploying. If you needed a new
+contract you also needed to implement a new factory.
+
+This was suboptimal for several reasons:
+
+- Increased surface area for things to go wrong
+- More Rain-isms creeping in
+- Redundant work to maintain a growing list of factories
+
+The legacy interface is available as `IFactory` but it is NOT RECOMMENDED for
+new contracts.
