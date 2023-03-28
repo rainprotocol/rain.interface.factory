@@ -8,8 +8,5 @@ interface ICloneableFactoryV1 {
     ///
     /// @param data As per `ICloneableV1`.
     /// @return New child contract address.
-    function clone(
-        address implementation,
-        bytes calldata data
-    ) external returns (address);
+    function clone(address implementation, bytes calldata data) external returns (address);
 }
