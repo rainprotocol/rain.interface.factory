@@ -2,7 +2,7 @@
 pragma solidity =0.8.18;
 
 import "../interface/ICloneableV1.sol";
-import "../interface/ICloneFactoryV1.sol";
+import "../interface/ICloneableFactoryV1.sol";
 import "rain.interpreter/abstract/DeployerDiscoverableMetaV1.sol";
 import {Clones} from "openzeppelin-contracts/contracts/proxy/Clones.sol";
 
