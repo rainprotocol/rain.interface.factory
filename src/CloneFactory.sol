@@ -3,8 +3,8 @@ pragma solidity =0.8.18;
 
 import "./interface/ICloneableV1.sol";
 import "./interface/ICloneFactoryV1.sol";
-import "../interpreter/deploy/DeployerDiscoverableMetaV1.sol";
-import {Clones} from "openzeppelin-contracts/proxy/Clones.sol";
+import "rain.interpreter/abstract/DeployerDiscoverableMetaV1.sol";
+import {Clones} from "openzeppelin-contracts/contracts/proxy/Clones.sol";
 
 /// Thrown when an implementation is the zero address which is always a mistake.
 error ZeroImplementation();
