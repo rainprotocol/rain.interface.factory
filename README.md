@@ -1,6 +1,6 @@
-# rain.interface.factory
+# rain.factory
 
-Docs at https://rainprotocol.github.io/rain.interface.factory
+Docs at https://rainprotocol.github.io/rain.factory
 
 ## Interfaces
 
@@ -22,6 +22,8 @@ Falling short of the ideal, we want to support:
 - Support existing patterns such as EIP1167 for clones, etc.
 - Avoid introducing Rain-isms as much as possible
 
+The onchain tooling for analysis is found at https://github.com/rainprotocol/rain.extrospection
+
 The current interfaces in this repository are for
 
 - `CloneFactoryV1` that is expected to clone proxies from a reference
@@ -30,7 +32,7 @@ The current interfaces in this repository are for
   expose an `initialize` function that the factory can call to act like a
   constructor
 
-## Legacy `IFactory`
+### Legacy `IFactory`
 
 The legacy factory model was much more restricted in that each factory
 implementation was 1:1 with the thing it was deploying. If you needed a new
@@ -44,3 +46,5 @@ This was suboptimal for several reasons:
 
 The legacy interface is available as `IFactory` but it is NOT RECOMMENDED for
 new contracts.
+
+## Implementations
