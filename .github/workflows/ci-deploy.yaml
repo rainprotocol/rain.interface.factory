@@ -17,12 +17,8 @@ jobs:
         with:
           version: nightly
       - name: Install rain
-        run: |
-          shopt -s expand_aliases
-          alias rain="nix shell github:rainprotocol/rain.cli -c rain"
-      - run: |
-          shopt -s expand_aliases
-          rain --version
+        run: nix profile install github:rainprotocol/rain.cli#rain
+      - run: rain --version
       # - name: Report public key to make it easy to send funds for deployments
       #   run: cast wallet address "${DEPLOYMENT_KEY}"
       # - name: Forge deploy contract to mumbai
