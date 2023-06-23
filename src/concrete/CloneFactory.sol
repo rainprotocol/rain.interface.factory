@@ -9,7 +9,7 @@ import {Clones} from "openzeppelin-contracts/contracts/proxy/Clones.sol";
 /// Thrown when an implementation is the zero address which is always a mistake.
 error ZeroImplementation();
 
-bytes32 constant CLONE_FACTORY_META_HASH = bytes32(0xae0fb5b68fe1791c72509bf46ea6abf6a982d21451265be0a017f7959712a67e);
+bytes32 constant CLONE_FACTORY_META_HASH = bytes32(0xd579a9e360906d024897f32ca8d782c645163dad24894843cfe11fbdc0742d55);
 
 contract CloneFactory is ICloneableFactoryV1, DeployerDiscoverableMetaV1 {
     constructor(DeployerDiscoverableMetaV1ConstructionConfig memory config_)
