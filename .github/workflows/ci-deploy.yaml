@@ -20,7 +20,9 @@ jobs:
         run: |
           shopt -s expand_aliases
           alias rain="nix shell github:rainprotocol/rain.cli -c rain"
-      - run: rain --version
+      - run: |
+        shopt -s expand_aliases
+        rain --version
       # - name: Report public key to make it easy to send funds for deployments
       #   run: cast wallet address "${DEPLOYMENT_KEY}"
       # - name: Forge deploy contract to mumbai
