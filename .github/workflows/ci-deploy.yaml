@@ -19,10 +19,10 @@ jobs:
       - name: Install rain
         run: nix profile install github:rainprotocol/rain.cli
       - run: rain --version
-      # - name: Report public key to make it easy to send funds for deployments
-      #   run: cast wallet address "${DEPLOYMENT_KEY}"
-      # - name: Forge deploy contract to mumbai
-      #   env:
-      #     CI_DEPLOY_RPC_URL: ${{ secrets.CI_DEPLOY_RPC_URL }}
-      #     EXPLORER_VERIFICATION_KEY: ${{ secrets.EXPLORER_VERIFICATION_KEY }}
-      #   run: forge script script/DeployOrderBook.sol:DeployOrderBook --legacy --ffi --verify --broadcast --rpc-url "${CI_DEPLOY_RPC_URL}" --etherscan-api-key "${EXPLORER_VERIFICATION_KEY}"
+      - name: Report public key to make it easy to send funds for deployments
+        run: cast wallet address "${DEPLOYMENT_KEY}"
+      - name: Forge deploy contract to mumbai
+        env:
+          CI_DEPLOY_RPC_URL: ${{ secrets.CI_DEPLOY_RPC_URL }}
+          EXPLORER_VERIFICATION_KEY: ${{ secrets.EXPLORER_VERIFICATION_KEY }}
+        run: forge script script/DeployCloneFactory.sol:DeployCloneFactory --legacy --verify --broadcast --rpc-url "${CI_DEPLOY_RPC_URL}" --etherscan-api-key "${EXPLORER_VERIFICATION_KEY}" --sig='run(bytes)' $(rain meta build -i <(rain meta solc artifact -c abi -i out/CloneFactory.sol/CloneFactory.json) -m solidity-abi-v2 -t json -e deflate -l en -E hex)
