@@ -2,6 +2,14 @@
 
 Docs at https://rainprotocol.github.io/rain.factory
 
+## Concrete implementations
+
+`CloneFactory` implements the latest version of `ICloneableFactory` allowing any
+compatible `ICloneable` contract to be cloned as an EIP1167 proxy and
+initialized.
+
+`CloneFactory` implements interpreter deployer discoverability.
+
 ## Interfaces
 
 Contains interfaces for working with Rain factories.
