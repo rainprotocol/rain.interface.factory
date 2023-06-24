@@ -6,7 +6,7 @@ pragma solidity ^0.8.18;
 /// initializing a cloned proxy.
 interface ICloneableV1 {
     /// Initialize is intended to work like constructors but for cloneable
-    /// proxies. The `ICloneableV1` contract MUST ensure that initialize cannot
+    /// proxies. The `ICloneableV1` contract MUST ensure that initialize can NOT
     /// be called more than once. The `ICloneableV1` contract is designed to be
     /// deployed by an `ICloneFactoryV1` but MUST NOT assume that it will be. It
     /// is possible for someone to directly deploy an `ICloneableV1` and fail to

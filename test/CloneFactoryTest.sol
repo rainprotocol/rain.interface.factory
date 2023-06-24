@@ -13,7 +13,11 @@ contract CloneFactoryTest is Test {
         address deployer = address(uint160(uint256(keccak256("deployer"))));
         vm.etch(deployer, hex"00");
         bytes memory meta = vm.readFileBinary("meta/CloneFactory.rain.meta");
-        vm.mockCall(deployer, "", abi.encode(address(0), address(0), address(0)));
+        vm.mockCall(
+            deployer,
+            abi.encodeWithSelector(IExpressionDeployerV1.deployExpression.selector),
+            abi.encode(address(0), address(0), address(0))
+        );
         vm.expectCall(address(deployer), abi.encodeWithSelector(IExpressionDeployerV1.deployExpression.selector));
         cloneFactory = new CloneFactory(DeployerDiscoverableMetaV1ConstructionConfig(deployer, meta));
     }
