@@ -58,6 +58,9 @@ contract CloneFactoryCloneTest is Test {
         // deployment will fail due to a hash mismatch as the github action
         // builds from source.
         bytes memory meta = vm.readFileBinary("meta/CloneFactory.rain.meta");
+        console2.log("meta hash:");
+        console2.logBytes32(keccak256(meta));
+
         // We only mock the call so that it doesn't error and prevent the
         // constructor from completing. We don't care about the return value.
         vm.mockCall(
