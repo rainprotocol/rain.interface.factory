@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: CAL
 pragma solidity ^0.8.18;
 
+/// @dev This hash MUST be returned when an `ICloneableV2` is successfully
+/// initialized.
 bytes32 constant ICLONEABLE_V2_SUCCESS = keccak256("ICloneableV2.initialize");
 
 /// @title ICloneableV2

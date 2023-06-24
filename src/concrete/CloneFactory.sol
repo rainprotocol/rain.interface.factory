@@ -19,8 +19,7 @@ bytes32 constant CLONE_FACTORY_META_HASH = bytes32(0xd579a9e360906d024897f32ca8d
 /// @notice A fairly minimal implementation of `ICloneableFactoryV2` and
 /// `DeployerDiscoverableMetaV1` that uses Open Zeppelin `Clones` to create
 /// EIP1167 clones of a reference bytecode. The reference bytecode MUST implement
-/// `ICloneableV2` and MUST NOT assume that it will be deployed by a clone
-/// factory.
+/// `ICloneableV2`.
 contract CloneFactory is ICloneableFactoryV2, DeployerDiscoverableMetaV1 {
     constructor(DeployerDiscoverableMetaV1ConstructionConfig memory config)
         DeployerDiscoverableMetaV1(CLONE_FACTORY_META_HASH, config)
@@ -28,11 +27,21 @@ contract CloneFactory is ICloneableFactoryV2, DeployerDiscoverableMetaV1 {
 
     /// @inheritdoc ICloneableFactoryV2
     function clone(address implementation, bytes calldata data) external returns (address) {
+        // Explicitly check that the implementation has code. This is a common
+        // mistake that will cause the clone to fail. Notably this catches the
+        // case of address(0). This check is not strictly necessary as a zero
+        // sized implementation will fail to initialize the child, but it gives
+        // a better error message.
         if (implementation.code.length == 0) {
             revert ZeroImplementationCodeSize();
         }
+        // Standard Open Zeppelin clone here.
         address child = Clones.clone(implementation);
+        // NewClone does NOT include the data passed to initialize.
+        // The implementation is responsible for emitting an event if it wants.
         emit NewClone(msg.sender, implementation, child);
+        // Checking the return value of initialize is mandatory as per
+        // ICloneableFactoryV2.
         if (ICloneableV2(child).initialize(data) != ICLONEABLE_V2_SUCCESS) {
             revert InitializationFailed();
         }
