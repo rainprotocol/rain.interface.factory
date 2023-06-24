@@ -1,0 +1,4 @@
+CloneFactoryCloneTest:testCloneBytecode(bytes) (runs: 1024, μ: 373905, ~: 363462)
+CloneFactoryCloneTest:testCloneInitializeData(bytes) (runs: 1024, μ: 375066, ~: 361687)
+CloneFactoryCloneTest:testCloneInitializeEvent(bytes) (runs: 1024, μ: 391115, ~: 380672)
+CloneFactoryZeroImplementationTest:testZeroImplementationError() (gas: 6851)
