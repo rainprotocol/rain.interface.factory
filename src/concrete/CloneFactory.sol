@@ -1,29 +1,50 @@
 // SPDX-License-Identifier: CAL
 pragma solidity =0.8.18;
 
-import "../interface/ICloneableV1.sol";
-import "../interface/ICloneableFactoryV1.sol";
+import "../interface/ICloneableV2.sol";
+import "../interface/ICloneableFactoryV2.sol";
 import "rain.interpreter/abstract/DeployerDiscoverableMetaV1.sol";
 import {Clones} from "openzeppelin-contracts/contracts/proxy/Clones.sol";
 
-/// Thrown when an implementation is the zero address which is always a mistake.
-error ZeroImplementation();
+/// Thrown when an implementation has zero code size which is always a mistake.
+error ZeroImplementationCodeSize();
 
-bytes32 constant CLONE_FACTORY_META_HASH = bytes32(0xd579a9e360906d024897f32ca8d782c645163dad24894843cfe11fbdc0742d55);
+/// Thrown when initialization fails.
+error InitializationFailed();
 
-contract CloneFactory is ICloneableFactoryV1, DeployerDiscoverableMetaV1 {
-    constructor(DeployerDiscoverableMetaV1ConstructionConfig memory config_)
-        DeployerDiscoverableMetaV1(CLONE_FACTORY_META_HASH, config_)
+/// @dev Expected hash of the clone factory rain metadata.
+bytes32 constant CLONE_FACTORY_META_HASH = bytes32(0x66ac989fb3fda2343dac5eacd286a74eb3183452a8a9cfb947f78c3f1c48adf8);
+
+/// @title CloneFactory
+/// @notice A fairly minimal implementation of `ICloneableFactoryV2` and
+/// `DeployerDiscoverableMetaV1` that uses Open Zeppelin `Clones` to create
+/// EIP1167 clones of a reference bytecode. The reference bytecode MUST implement
+/// `ICloneableV2`.
+contract CloneFactory is ICloneableFactoryV2, DeployerDiscoverableMetaV1 {
+    constructor(DeployerDiscoverableMetaV1ConstructionConfig memory config)
+        DeployerDiscoverableMetaV1(CLONE_FACTORY_META_HASH, config)
     {}
 
-    /// @inheritdoc ICloneableFactoryV1
-    function clone(address implementation_, bytes calldata data_) external returns (address) {
-        if (implementation_ == address(0)) {
-            revert ZeroImplementation();
+    /// @inheritdoc ICloneableFactoryV2
+    function clone(address implementation, bytes calldata data) external returns (address) {
+        // Explicitly check that the implementation has code. This is a common
+        // mistake that will cause the clone to fail. Notably this catches the
+        // case of address(0). This check is not strictly necessary as a zero
+        // sized implementation will fail to initialize the child, but it gives
+        // a better error message.
+        if (implementation.code.length == 0) {
+            revert ZeroImplementationCodeSize();
         }
-        address clone_ = Clones.clone(implementation_);
-        emit NewClone(msg.sender, implementation_, clone_);
-        ICloneableV1(clone_).initialize(data_);
-        return clone_;
+        // Standard Open Zeppelin clone here.
+        address child = Clones.clone(implementation);
+        // NewClone does NOT include the data passed to initialize.
+        // The implementation is responsible for emitting an event if it wants.
+        emit NewClone(msg.sender, implementation, child);
+        // Checking the return value of initialize is mandatory as per
+        // ICloneableFactoryV2.
+        if (ICloneableV2(child).initialize(data) != ICLONEABLE_V2_SUCCESS) {
+            revert InitializationFailed();
+        }
+        return child;
     }
 }

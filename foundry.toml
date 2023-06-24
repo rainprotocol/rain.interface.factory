@@ -9,10 +9,13 @@ solc = "0.8.18"
 optimizer = true
 optimizer_runs = 100000
 
-fuzz.runs = 1024
+bytecode_hash = "none"
+cbor_metadata = false
 
-# [profile.default.model_checker]
-# contracts = {'src/LibQAKitMemory.sol' = ['LibQAKitMemory']}
-# engine = 'chc'
-# timeout = 10000
-# targets = ['assert', 'underflow', 'overflow', 'divByZero', 'constantCondition', 'popEmptyArray', 'outOfBounds']
+# Build metadata used for testing rain meta aware contracts in this folder rather
+# than expose ffi to forge.
+fs_permissions = [{ access = "read", path = "./meta"}]
+
+[fuzz]
+runs = 2048
+

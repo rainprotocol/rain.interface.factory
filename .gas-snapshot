@@ -1,0 +1,6 @@
+CloneFactoryCloneTest:testCloneBytecode(bytes) (runs: 2048, μ: 371965, ~: 361874)
+CloneFactoryCloneTest:testCloneInitializeData(bytes) (runs: 2048, μ: 373024, ~: 360088)
+CloneFactoryCloneTest:testCloneInitializeEvent(bytes) (runs: 2048, μ: 389182, ~: 379091)
+CloneFactoryCloneTest:testCloneInitializeFailureFails(bytes32) (runs: 2048, μ: 162628, ~: 162628)
+CloneFactoryCloneTest:testCloneUninitializableFails(address,bytes) (runs: 2048, μ: 10287, ~: 9980)
+CloneFactoryCloneTest:testZeroImplementationCodeSizeError(address,bytes) (runs: 2048, μ: 10851, ~: 10819)
