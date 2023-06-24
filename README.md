@@ -26,13 +26,23 @@ The onchain tooling for analysis is found at https://github.com/rainprotocol/rai
 
 The current interfaces in this repository are for
 
-- `CloneFactoryV1` that is expected to clone proxies from a reference
+- `ICloneableFactoryV2` that is expected to clone proxies from a reference
   implementation
-- A small interface `ICloneableV1` designed for cloneable proxy contracts to
+- A small interface `ICloneableV2` designed for cloneable proxy contracts to
   expose an `initialize` function that the factory can call to act like a
   constructor
 
-### Legacy `IFactory`
+### Legacy
+
+#### `ICloneableV1`
+
+This version of `ICloneable` did not have any explicit return value on success of
+initialize. It is possible for contracts that do not implement `ICloneableV1` to
+silently fail to initialize when cloned by an `ICloneableFactoryV1`.
+
+Newer versions of the interface include an explicit success value and check.
+
+#### `IFactory`
 
 The legacy factory model was much more restricted in that each factory
 implementation was 1:1 with the thing it was deploying. If you needed a new
