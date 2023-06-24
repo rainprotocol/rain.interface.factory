@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: CAL
 pragma solidity =0.8.18;
 
-import "forge-std/Test.sol";
+import "./CloneFactoryTest.sol";
 
 import "src/concrete/CloneFactory.sol";
 
-contract CloneFactoryZeroImplementationTest is Test {
+contract CloneFactoryZeroImplementationTest is CloneFactoryTest {
     function testZeroImplementationError() public {
-
+        vm.expectRevert(abi.encodeWithSelector(ZeroImplementation.selector));
+        cloneFactory.clone(address(0), "");
     }
 }

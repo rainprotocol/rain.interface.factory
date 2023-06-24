@@ -17,13 +17,13 @@ contract CloneFactory is ICloneableFactoryV1, DeployerDiscoverableMetaV1 {
     {}
 
     /// @inheritdoc ICloneableFactoryV1
-    function clone(address implementation_, bytes calldata data_) external returns (address) {
-        if (implementation_ == address(0)) {
+    function clone(address implementation, bytes calldata data) external returns (address) {
+        if (implementation == address(0)) {
             revert ZeroImplementation();
         }
-        address clone_ = Clones.clone(implementation_);
-        emit NewClone(msg.sender, implementation_, clone_);
-        ICloneableV1(clone_).initialize(data_);
-        return clone_;
+        address child = Clones.clone(implementation);
+        emit NewClone(msg.sender, implementation, child);
+        ICloneableV1(child).initialize(data);
+        return child;
     }
 }
