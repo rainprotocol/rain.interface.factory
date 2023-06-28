@@ -6,9 +6,11 @@ pragma solidity ^0.8.18;
 bytes32 constant ICLONEABLE_V2_SUCCESS = keccak256("ICloneableV2.initialize");
 
 /// @title ICloneableV2
-/// @notice Minimal interface following the Open Zeppelin conventions for
-/// initializing a cloned proxy.
+/// @notice Interface for cloneable contracts that support initialization.
 interface ICloneableV2 {
+    /// Overloaded initialize function MUST revert with this error.
+    error InitializeSignatureFn();
+
     /// Initialize is intended to work like constructors but for cloneable
     /// proxies. The `ICloneableV2` contract MUST ensure that initialize can NOT
     /// be called more than once. The `ICloneableV2` contract is designed to be
@@ -19,12 +21,18 @@ interface ICloneableV2 {
     /// `ICloneableV2` MUST take appropriate measures to ensure that functions
     /// called before initialize are safe to do so, or revert.
     ///
-    /// To be fully generic `initilize` accepts `bytes` and so MUST ABI decode
-    /// within the initialize function. This allows the factory to service
+    /// To be fully generic, `initilize` accepts `bytes` and so MUST ABI decode
+    /// within the initialize function. This allows a single factory to service
     /// arbitrary cloneable proxies but also erases the type of the
-    /// initialization config from the ABI. One workaround is to emit an event
-    /// containing the initialization config type, so that the type appears
-    /// within the event and therefore the ABI.
+    /// initialization config from the ABI. As tooling will inevitably require
+    /// the ABI to be known, it is RECOMMENDED that the `ICloneableV2` contract
+    /// implements a typed `initialize` function that overloads the generic
+    /// `initialize(bytes)` function. This overloaded function MUST revert with
+    /// `InitializeSignatureFn` always, so that it is NEVER accidentally called.
+    /// This avoids complex and expensive delegate call style patterns where a
+    /// typed overload has to call back to itself and preserve the sender,
+    /// instead we force the caller to know the correct signature and call the
+    /// correct function directly with encoded bytes.
     ///
     /// If initialization is successful the `ICloneableV2` MUST return the
     /// keccak256 hash of the string "ICloneableV2.initialize". This avoids false
