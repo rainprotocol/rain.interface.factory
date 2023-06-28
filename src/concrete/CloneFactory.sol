@@ -13,7 +13,7 @@ error ZeroImplementationCodeSize();
 error InitializationFailed();
 
 /// @dev Expected hash of the clone factory rain metadata.
-bytes32 constant CLONE_FACTORY_META_HASH = bytes32(0x66ac989fb3fda2343dac5eacd286a74eb3183452a8a9cfb947f78c3f1c48adf8);
+bytes32 constant CLONE_FACTORY_META_HASH = bytes32(0x1efc6b18f7f4aa4266a7801e1b611be09f1977d4e1a6c3c5c17ac27abf81027e);
 
 /// @title CloneFactory
 /// @notice A fairly minimal implementation of `ICloneableFactoryV2` and
