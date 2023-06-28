@@ -16,7 +16,7 @@
       in rec {
         packages = rec {
           build-meta = pkgs.writeShellScriptBin "build-meta" ''
-            forge build && \
+            forge build --force && \
             ${rain-cli} meta build -o meta/CloneFactory.rain.meta -i <(${rain-cli} meta solc artifact -c abi -i out/CloneFactory.sol/CloneFactory.json) -m solidity-abi-v2 -t json -e deflate -l en
           '';
 
