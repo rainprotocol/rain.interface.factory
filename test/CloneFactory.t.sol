@@ -1,18 +1,13 @@
 // SPDX-License-Identifier: CAL
-pragma solidity =0.8.18;
+pragma solidity =0.8.19;
 
 import "forge-std/Test.sol";
 
-import "src/concrete/CloneFactory.sol";
 import "rain.interpreter/abstract/DeployerDiscoverableMetaV1.sol";
-import {CloneFactory} from "src/concrete/CloneFactory.sol";
+import "rain.extrospection/src/lib/LibExtrospectERC1167Proxy.sol";
 
-/// @dev EIP1167 proxy is known bytecode that wraps the implementation address.
-/// This is the prefix.
-bytes constant EIP1167_PREFIX = hex"363d3d373d3d3d363d73";
-/// @dev EIP1167 proxy is known bytecode that wraps the implementation address.
-/// This is the suffix.
-bytes constant EIP1167_SUFFIX = hex"5af43d82803e903d91602b57fd5bf3";
+import "src/concrete/CloneFactory.sol";
+import {CloneFactory} from "src/concrete/CloneFactory.sol";
 
 /// @title TestCloneable
 /// @notice A cloneable contract that implements `ICloneableV2`. Initializes
@@ -81,7 +76,10 @@ contract CloneFactoryCloneTest is Test {
         TestCloneable implementation = new TestCloneable();
 
         address child = _iCloneFactory.clone(address(implementation), data);
-        assertEq(child.code, abi.encodePacked(EIP1167_PREFIX, implementation, EIP1167_SUFFIX));
+
+        (bool result, address proxyImplementation) = LibExtrospectERC1167Proxy.isERC1167Proxy(child.code);
+        assertEq(result, true);
+        assertEq(proxyImplementation, address(implementation));
     }
 
     /// The child should be initialized with the data passed to `clone`.
